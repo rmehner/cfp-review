@@ -28,10 +28,17 @@
   }
   // ---
 
-  var sheetUrl = prompt("Enter Google Spreadsheet URL",
-      localStorage.getItem('sheetUrl') || '');
-  localStorage.setItem('sheetUrl', sheetUrl);
-  var sheetID = sheetUrl.match(/key=([^&]+)/)[1];
+  var keyParam = location.href.match(/key=([^&\/]+)/);
+  var sheetID;
+  if (keyParam) {
+    sheetID = keyParam[1];
+  } else {
+    var sheetUrl = keyParam ? keyParam[1] :
+        prompt("Enter Google Spreadsheet URL", 
+            localStorage.getItem('sheetUrl') || '');
+    localStorage.setItem('sheetUrl', sheetUrl);
+    sheetID = sheetUrl.match(/\/spreadsheets\/d\/([^&]+)\//)[1];
+  }
   var spreadsheetLink = "https://docs.google.com/a/github.com/spreadsheet/ccc?key=" + sheetID;
 
   // restore previous votes into the current vote form
@@ -53,7 +60,8 @@
 
     votes[vote.sheetRowNumber] = {
       vote: vote.vote,
-      comment: vote.comment
+      comment: vote.comment,
+      id: vote.id,
     };
     storeVotes(votes);
 
@@ -64,8 +72,10 @@
     setTimeout(successCallback, 150);
     exportData(e);
     if (document.querySelector('#speed_mode').checked) {
-      document.querySelector('.pagination-next-fullTable').click();
-      window.scrollTo(0,0);
+      setTimeout(function() {
+        document.querySelector('.pagination-next-fullTable').click();
+        window.scrollTo(0,0);
+      });
     }
   }
 
@@ -73,8 +83,8 @@
   function showInfo(data) {
     totalRows = data.length;
     data = data.map(function (proposal) {
-      proposal.summary = proposal["summarytobeusedonsiteplaintextormarkdown3-5sentences."];
-      proposal.extra = proposal["whatelseyouwanttotellusaboutthetalkoutsidethepublicsummary3-5sentences"];
+      proposal.summary = proposal["presentationsummarytobeusedintheprogram"];
+      proposal.extra = proposal["whatelsedoyouwanttotellusaboutthetalk"];
       proposal.sheetRowNumber = proposal.rowNumber + 1;
       return proposal;
     })
@@ -90,6 +100,14 @@
     Tabletop.init( { key: sheetID, callback: showInfo, simpleSheet: true } )
   })
 
+  window.addEventListener('keydown', function(e) {
+    var key = String.fromCharCode(e.keyCode);
+    if (key) {
+      var vote = $('#vote_' + key);
+      $('#vote_' + key).click();
+    }
+  })
+
   // localStorage to csv
   function exportData(e) {
     e.preventDefault();
@@ -98,7 +116,7 @@
     for(var idx = 0; idx < totalRows; idx++) {
       var vote = votes[idx];
       if(vote) {
-        csv += vote.vote + ',' + vote.comment + '\n';
+        csv += vote.id + ',' + vote.vote + ',' + vote.comment + '\n';
       } else {
         csv += '\n';
       }
