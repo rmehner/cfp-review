@@ -103,7 +103,6 @@
   window.addEventListener('keydown', function(e) {
     var key = String.fromCharCode(e.keyCode);
     if (key) {
-      var vote = $('#vote_' + key);
       $('#vote_' + key).click();
     }
   })
