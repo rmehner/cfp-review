@@ -34,12 +34,11 @@
     sheetID = keyParam[1];
   } else {
     var sheetUrl = keyParam ? keyParam[1] :
-        prompt("Enter Google Spreadsheet URL", 
+        prompt("Enter Google Spreadsheet URL",
             localStorage.getItem('sheetUrl') || '');
     localStorage.setItem('sheetUrl', sheetUrl);
     sheetID = sheetUrl.match(/\/spreadsheets\/d\/([^&]+)\//)[1];
   }
-  var spreadsheetLink = "https://docs.google.com/a/github.com/spreadsheet/ccc?key=" + sheetID;
 
   // restore previous votes into the current vote form
   function loadValues() {
