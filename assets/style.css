@@ -66,3 +66,7 @@ input:checked + span { background-color: yellow; }
   float: left;
   width: 300px;
 }
+
+.hidden {
+  display: none;
+}

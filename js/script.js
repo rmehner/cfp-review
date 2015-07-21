@@ -5,6 +5,10 @@
     $('#download-link').show();
   } catch (e) {}
 
+  if (location.href.match(/debug/)) {
+    $('#clear-database-link').show();
+  }
+
   // localStorage warppers
   Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
