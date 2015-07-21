@@ -1,5 +1,10 @@
 (function () {
 
+  try {
+    new Blob;
+    $('#download-link').show();
+  } catch (e) {}
+
   // localStorage warppers
   Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
