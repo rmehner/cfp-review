@@ -37,7 +37,7 @@
   }
   // ---
 
-  var keyParam = location.href.match(/key=([^&\/]+)/);
+  var keyParam = location.href.match(/key=(\w+)/);
   var sheetID;
   if (keyParam) {
     sheetID = keyParam[1];
