@@ -138,8 +138,19 @@
     return vote;
   }
 
+  function clearDatabase(e) {
+    e.preventDefault();
+
+    var confirmed = window.confirm('Do you really want to clear the whole database?');
+    if (!confirmed) return;
+    storeVotes([]);
+    loadValues();
+    $('[id^=vote_]').prop('checked', false);
+  }
+
   $('.content').on('change', 'form input', persistVote);
   $('.content').on('blur', 'form textarea', persistVote)
   $('#export-link').on('click', exportData);
+  $('#clear-database-link').on('click', clearDatabase);
   $(window).on('hashchange', loadValues);
 }());
