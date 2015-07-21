@@ -148,9 +148,23 @@
     $('[id^=vote_]').prop('checked', false);
   }
 
+  function download(e) {
+    e.preventDefault();
+    exportData(e);
+
+    var blob = new Blob(
+      [$('#export').val()],
+      {
+        type: "text/comma-separated-values;charset=utf-8"
+      }
+    );
+    saveAs(blob, "votes.csv");
+  }
+
   $('.content').on('change', 'form input', persistVote);
   $('.content').on('blur', 'form textarea', persistVote)
   $('#export-link').on('click', exportData);
   $('#clear-database-link').on('click', clearDatabase);
+  $('#download-link').on('click', download);
   $(window).on('hashchange', loadValues);
 }());
