@@ -110,7 +110,7 @@
 
   window.addEventListener('keydown', function(e) {
     var key = String.fromCharCode(e.keyCode);
-    if (key) {
+    if (key && e.target.tagName !== 'TEXTAREA') {
       $('#vote_' + key).click();
     }
   })
